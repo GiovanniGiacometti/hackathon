@@ -27,6 +27,7 @@ dependencies = [
     "ipykernel>=6.29.5",
     "crewai[tools]>=0.86.0,<1.0.0",
     "polars>=1.19.0",
+    "browser-use>=0.1.22",
 ]
 
 [dependency-groups]
@@ -45,7 +46,3 @@ run_crew = "hackathon.main:run"
 train = "hackathon.main:train"
 replay = "hackathon.main:replay"
 test = "hackathon.main:test"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
