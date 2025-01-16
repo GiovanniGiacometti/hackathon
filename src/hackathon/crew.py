@@ -3,34 +3,30 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai import LLM
 import os
-
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+from crewai_tools import SerperDevTool
 
 
 @CrewBase
 class Hackathon:
     """Hackathon crew"""
 
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
     agents_config: dict[str, Any] = "config/agents.yaml"  # type: ignore
     tasks_config: dict[str, Any] = "config/tasks.yaml"  # type: ignore
     agents: list[Agent]
     tasks: list[Task]
     llm = LLM(
-        model="gemini/gemini-2.0-flash-exp",
-        api_key=os.getenv("GEMINI_API_KEY"),
+        model="gpt-4o-mini",
+        api_key=os.getenv("OPENAI_API_KEY"),
+        temperature=0.3,
     )
 
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def researcher(self) -> Agent:
+    def news_finder(self) -> Agent:
         return Agent(
-            config=self.agents_config["researcher"], verbose=True, llm=self.llm
+            config=self.agents_config["news_finder"],
+            verbose=True,
+            llm=self.llm,
+            tools=[SerperDevTool(api_key=os.getenv("SERPER_API_KEY"))],
         )
 
     @agent
@@ -39,9 +35,6 @@ class Hackathon:
             config=self.agents_config["reporting_analyst"], verbose=True, llm=self.llm
         )
 
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def research_task(self) -> Task:
         return Task(
@@ -55,13 +48,10 @@ class Hackathon:
     @crew
     def crew(self) -> Crew:
         """Creates the Hackathon crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
         return Crew(
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )

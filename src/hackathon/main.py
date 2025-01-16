@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import sys
 import warnings
-import agentops
-
+import os
 from hackathon.crew import Hackathon
+from langtrace_python_sdk import langtrace
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -17,8 +17,9 @@ def run():
     """
     Run the crew.
     """
-    inputs = {"topic": "AI LLMs"}
-    agentops.init()
+    inputs = {"topic": "AI LLMs", "date": "2024-01-16"}
+    langtrace.init(api_key=os.getenv("LANGTRACE_API_KEY"))
+    # agentops.init()
     Hackathon().crew().kickoff(inputs=inputs)
 
 
