@@ -18,6 +18,18 @@ class GraphState(BaseModel):
 
     question: str = Field(description="The question asked by the user.", default="")
     question_id: int = Field(description="The id of the user's question.", default=0)
+    requires_manual: bool = Field(
+        description="Whether the query requires information from the Manuale di Cucina.", default=False
+    )
+    requires_code: bool = Field(
+        description="Whether the query requires information from the Codice Galattico.", default=False
+    )
+    manual_documents: list[Document] = Field(
+        description="The list of documents of manuale di cucina.", default_factory=list
+    )
+    code_documents: list[Document] = Field(
+        description="The list of documents of galactic code.", default_factory=list
+    )
     documents: list[Document] = Field(
         description="The list of documents.", default_factory=list
     )

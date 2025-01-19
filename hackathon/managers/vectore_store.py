@@ -188,8 +188,7 @@ class VectorstoreManager:
         )
 
         for doc in tqdm(
-            galactic_code_documents,
-            desc="Adding galactic code documents to vectorstore",
+            galactic_code_documents, desc="Adding galactic code documents to vectorstore"
         ):
             doc.metadata.update({"is_code": True})
             doc.page_content = Formatter.format_document(doc)
@@ -206,7 +205,7 @@ class VectorstoreManager:
             doc.page_content = Formatter.format_document(doc)
 
         documents = galactic_code_documents + cooking_manual_documents
-
+        
         return documents
 
     def _load_menus(self) -> list[Document]:

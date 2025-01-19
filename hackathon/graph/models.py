@@ -5,11 +5,14 @@ from langchain.schema import Document
 # region Router
 
 
-class RouteQuery(BaseModel):
+class DecideManualCode(BaseModel):
     """Route a user query to the most relevant datasource."""
 
-    datasource: Literal["vectorstore", "websearch"] = Field(
-        description="Given a user question choose to route it to web search or a vectorstore.",
+    requires_manual: bool = Field(
+        description="Whether the query requires information from the Manuale di Cucina.",
+    )
+    requires_code: bool = Field(
+        description="Whether the query requires information from the Codice Galattico.",
     )
 
 
