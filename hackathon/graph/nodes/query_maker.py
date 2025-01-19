@@ -24,7 +24,7 @@ def query_maker(state: GraphState) -> Dict[str, Any]:
         A dictionary containing the retrieved documents.
     """
     mongo_possible_values = mongo_db_store_manager.describe_collection()
-    max_tries = 3
+    max_tries = 4
     error = None
     empty_result = False
     documents = []
@@ -101,7 +101,7 @@ def query_maker(state: GraphState) -> Dict[str, Any]:
     # something went wrong and only retain documents
     # which contain at least one metadata
 
-    if len(langchain_documents) > 15:
+    if len(langchain_documents) > 10:
         parse_docs = []
 
         menu_metadata = state.menu_metadata.model_dump()
